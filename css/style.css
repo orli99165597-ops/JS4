@@ -1,0 +1,428 @@
+@import url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/NanumSquareRound.woff');
+
+/* 
+  오트밀(Oatmeal) 스타일 포트폴리오 스타일시트
+  - 차분하고 세련된 베이지/다크브라운 톤
+  - 둥글고 부드러운 폰트(NanumSquareRound) 적용
+  - 그림자를 제거하고 깔끔한 실선 테두리로 플랫(Flat)한 느낌 강조
+*/
+
+:root {
+    --primary-color: #4A3F35; /* 다크 브라운 (텍스트 및 테두리) */
+    --secondary-color: #7A6F64; /* 부드러운 토프/중간 브라운 */
+    --bg-color: #F4EBE1; /* 오트밀 베이지 (배경) */
+    --container-bg: #FAF6F0; /* 살짝 더 밝은 베이지 (카드 배경) */
+    --text-color: #332C27;
+    --font-family: 'NanumSquareRound', 'Jua', sans-serif;
+    --hit-area: 60px; 
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    overflow-x: hidden;
+    word-break: keep-all; 
+}
+
+/* 접근성을 위한 숨김 링크 */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--primary-color);
+    color: var(--bg-color);
+    padding: 8px;
+    z-index: 100;
+    font-size: 1.2rem;
+}
+.skip-link:focus {
+    top: 0;
+}
+
+/* 헤더 및 네비게이션 (오트밀 플랫 스타일) */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: var(--bg-color);
+    border-bottom: 2px solid var(--primary-color);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    letter-spacing: 1px;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--secondary-color);
+    font-size: 1.1rem;
+    font-weight: bold;
+    transition: color 0.3s;
+    padding: 0.5rem;
+}
+
+.nav-links a:hover {
+    color: var(--primary-color);
+}
+
+/* TTS(음성 재생) 버튼 - 아웃라인 스타일 */
+.tts-controls {
+    display: flex;
+    gap: 1rem;
+}
+
+.tts-btn {
+    min-width: var(--hit-area);
+    min-height: calc(var(--hit-area) - 10px);
+    background-color: transparent;
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+    border-radius: 30px;
+    font-family: var(--font-family);
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+    padding: 0 1rem;
+}
+
+.tts-btn:hover {
+    background-color: var(--primary-color);
+    color: var(--bg-color);
+}
+
+/* 메인 컨텐츠 컨테이너 (플랫한 박스 형태) */
+.story-container {
+    position: relative;
+    width: 90%;
+    max-width: 800px;
+    margin: 3rem auto;
+    min-height: 50vh;
+    overflow: hidden;
+    background: var(--container-bg);
+    border: 2px solid #A35D6A; /* 오페라 색상 테두리 */
+    box-shadow: 0 0 10px #A35D6A, 0 0 25px rgba(163, 93, 106, 0.4); /* 네온 발광 효과 */
+    border-radius: 12px;
+}
+
+/* 페이지 전환 애니메이션 */
+.page-section {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all 0.6s ease-in-out;
+    pointer-events: none;
+}
+
+.page-section.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+}
+
+.page-section.previous {
+    transform: translateX(-100%);
+}
+
+/* 텍스트 하이라이트 (TTS 연동) */
+.sentence-span {
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.highlight {
+    background-color: var(--primary-color);
+    color: var(--bg-color);
+    border-radius: 5px;
+    padding: 0 5px;
+}
+
+/* 타이포그래피 (고급스럽고 정갈하게) */
+h1, h2 {
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    line-height: 1.3;
+    font-weight: 800;
+    text-align: center;
+}
+
+h1 { font-size: 2.8rem; letter-spacing: -1px; }
+h2 { font-size: 2.2rem; }
+p { 
+    font-size: 1.4rem; 
+    color: var(--secondary-color); 
+    margin-bottom: 1rem; 
+    line-height: 1.6;
+    text-align: center;
+}
+
+.slogan {
+    margin-bottom: 0.2rem;
+}
+
+/* 갤러리(작품) 섹션 스타일 - 프레임 스타일 */
+.gallery-container {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+}
+
+.gallery-item {
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.3s;
+    cursor: pointer;
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid var(--primary-color);
+    transition: filter 0.3s;
+}
+
+.work-title {
+    margin-top: 1rem;
+    font-size: 1.2rem;
+    color: var(--primary-color);
+    font-weight: bold;
+    border-bottom: 1px solid var(--primary-color);
+    padding-bottom: 2px;
+}
+
+.gallery-item:hover {
+    transform: translateY(-5px);
+}
+.gallery-item:hover img {
+    filter: brightness(0.9);
+}
+
+/* 소셜 미디어 및 하단 네비게이션 버튼 (솔리드 & 아웃라인) */
+.social-links {
+    margin-top: 2.5rem;
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+}
+
+.social-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: calc(var(--hit-area) + 20px);
+    min-height: var(--hit-area);
+    background-color: #A35D6A; /* 배경 전체를 레드와인(오페라) 색상으로 */
+    color: #FFFFFF !important; /* 텍스트는 흰색 */
+    border: 2px solid #A35D6A;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 0 1.5rem;
+    transition: all 0.3s;
+}
+
+.social-btn:hover {
+    background-color: var(--primary-color); /* 마우스 올렸을 때 다크 브라운으로 */
+    border-color: var(--primary-color);
+    color: #FFFFFF !important;
+}
+
+/* 하단 페이지 컨트롤 버튼 */
+.page-controls {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.nav-btn {
+    min-width: var(--hit-area);
+    min-height: var(--hit-area);
+    background-color: var(--primary-color);
+    color: var(--bg-color);
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    font-family: var(--font-family);
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0 2rem;
+    transition: all 0.2s;
+}
+
+.nav-btn:hover {
+    background-color: transparent;
+    color: var(--primary-color);
+}
+
+/* 반응형 레이아웃 (모바일) */
+@media (max-width: 600px) {
+    .header { flex-direction: column; gap: 1rem; text-align: center; border-bottom: none; }
+    .story-container { 
+        border: 2px solid #A35D6A; 
+        box-shadow: 0 0 10px #A35D6A, 0 0 20px rgba(163, 93, 106, 0.4); 
+        border-radius: 12px; 
+        width: 95%; 
+        margin: 1rem auto; 
+    }
+    .tts-controls { margin-top: 1rem; }
+    h1 { font-size: 2rem; }
+    h2 { font-size: 1.6rem; }
+    p { font-size: 1.2rem; }
+    .page-section { padding: 1.5rem; }
+}
+
+/* 상담 모달 팝업 스타일 */
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1000; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgba(0,0,0,0.6); 
+}
+
+.modal-content {
+    background-color: var(--container-bg);
+    margin: 10% auto; 
+    padding: 2.5rem;
+    border: 2px solid var(--primary-color);
+    width: 90%;
+    max-width: 450px;
+    border-radius: 12px;
+    position: relative;
+}
+
+.close-modal {
+    color: var(--primary-color);
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-modal:hover {
+    color: #A35D6A;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--primary-color);
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid var(--primary-color);
+    border-radius: 6px;
+    font-family: var(--font-family);
+    background-color: var(--bg-color);
+    font-size: 1rem;
+    color: var(--text-color);
+}
+
+.submit-btn {
+    width: 100%;
+    margin-top: 1rem;
+    cursor: pointer;
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.submit-btn:hover {
+    background-color: #A35D6A;
+    border-color: #A35D6A;
+}
+
+/* 관리자 버튼 글래스모피즘 스타일 */
+.admin-glass-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    text-decoration: none;
+    z-index: 1000;
+    
+    /* 글래스모피즘 핵심 속성 */
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    
+    transition: all 0.3s ease;
+}
+
+.admin-glass-btn:hover {
+    background: rgba(255, 255, 255, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* 푸터 영역 스타일 */
+.site-footer {
+    text-align: center;
+    padding: 1.5rem 1rem;
+    margin-top: 2rem;
+    color: var(--secondary-color);
+    border-top: 1px dashed var(--primary-color);
+}
+
+.site-footer p {
+    font-size: 1.1rem;
+    margin-bottom: 0;
+}

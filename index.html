@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="에너제틱한 웹 디자이너의 포트폴리오입니다.">
+    <title>웹 디자이너 포트폴리오</title>
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- 최상단에 눈에 잘 띄게 배치된 관리자 버튼 (글래스모피즘) -->
+    <div style="text-align: center; padding-top: 15px; position: relative; z-index: 99999;">
+        <a href="admin.html" style="display: inline-block; padding: 8px 16px; background: rgba(163, 93, 106, 0.2); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 2px solid rgba(163, 93, 106, 0.5); border-radius: 20px; font-weight: bold; font-size: 0.85rem; color: #A35D6A; text-decoration: none; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">👑 관리자 페이지 (Admin)</a>
+    </div>
+
+    <!-- 접근성을 고려한 건너뛰기 링크 -->
+    <a href="#main-content" class="skip-link">본문 바로가기</a>
+
+    <!-- 헤더: 로고 및 네비게이션 -->
+    <header class="header">
+        <div class="logo">OrangeDesign</div>
+        <nav aria-label="메인 네비게이션">
+            <ul class="nav-links">
+                <li><a href="#hero">홈</a></li>
+                <li><a href="#about">소개</a></li>
+                <li><a href="#works">작품</a></li>
+                <li><a href="#cta">연락하기</a></li>
+            </ul>
+        </nav>
+        <!-- 음성 재생 컨트롤 (접근성 고려) -->
+        <div class="tts-controls">
+            <button id="play-tts" class="tts-btn" aria-label="음성 재생">▶️ 읽어주기</button>
+            <button id="stop-tts" class="tts-btn" aria-label="음성 정지">⏹️ 정지</button>
+        </div>
+    </header>
+
+    <!-- 동화책 형식의 포트폴리오 메인 (페이지 넘김 UI) -->
+    <main id="main-content" class="story-container">
+        <!-- 히어로 섹션 -->
+        <section id="hero" class="page-section active" aria-labelledby="hero-title">
+            <div class="content-wrapper">
+                <h1 id="hero-title" class="page-title" data-sentence="1"></h1>
+                <p class="slogan" data-sentence="2"></p>
+                <p class="slogan" data-sentence="11"></p>
+                <p class="slogan" data-sentence="9" style="margin-top: 1rem;"></p>
+            </div>
+        </section>
+
+        <!-- 소개 섹션 -->
+        <section id="about" class="page-section" aria-labelledby="about-title">
+            <div class="content-wrapper">
+                <h2 id="about-title" data-sentence="3"></h2>
+                <p class="description" data-sentence="4"></p>
+                <p class="description" data-sentence="10"></p>
+            </div>
+        </section>
+
+        <!-- 작품(갤러리) 섹션 -->
+        <section id="works" class="page-section" aria-labelledby="works-title">
+            <div class="content-wrapper">
+                <h2 id="works-title" data-sentence="7"></h2>
+                <div class="gallery-container">
+                    <!-- 실제 작품 이미지 삽입 -->
+                    <div class="gallery-item">
+                        <img src="../images/1.png" alt="몽당연필">
+                        <span class="work-title">1. 몽당연필</span>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="../images/2.png" alt="두리야">
+                        <span class="work-title">2. 두리야</span>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="../images/3.png" alt="우울증">
+                        <span class="work-title">3. 우울증</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA 섹션 -->
+        <section id="cta" class="page-section" aria-labelledby="cta-title">
+            <div class="content-wrapper">
+                <h2 id="cta-title" data-sentence="5"></h2>
+                <p data-sentence="6"></p>
+                <div class="social-links">
+                    <a href="#" class="social-btn" aria-label="상담 및 요구사항">상담 및 요구사항</a>
+                    <a href="https://www.instagram.com/duri_um/?igsh=MXV4emE0NzJvN3Bsdw%3D%3D" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="인스타그램으로 이동">Instagram</a>
+                    <a href="https://www.facebook.com/profile.php?id=61559893084769&sk=about&locale=ko_KR" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="페이스북으로 이동">Facebook</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 페이지 넘김(동화책) 컨트롤 -->
+    <div class="page-controls">
+        <button id="prev-page" class="nav-btn" aria-label="이전 페이지">이전</button>
+        <button id="next-page" class="nav-btn" aria-label="다음 페이지">다음</button>
+    </div>
+
+    <!-- 푸터 영역 -->
+    <footer class="site-footer">
+        <p><strong>오르리</strong> | 010-4712-5597</p>
+        <div style="margin-top: 15px;">
+            <a href="terms.html" style="color: #A35D6A; text-decoration: none; font-size: 0.95rem; margin-right: 15px; font-weight: bold;">이용약관</a>
+            <a href="privacy.html" style="color: #A35D6A; text-decoration: none; font-size: 0.95rem; font-weight: bold;">개인정보처리방침</a>
+        </div>
+    </footer>
+
+    <!-- 상담 및 요구사항 팝업창 -->
+    <div id="consultModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2 style="text-align: center;">상담 및 요구사항</h2>
+            <form id="consultForm">
+                <div class="form-group">
+                    <label for="userName">이름:</label>
+                    <input type="text" id="userName" name="userName" required placeholder="홍길동">
+                </div>
+                <div class="form-group">
+                    <label for="userEmail">이메일:</label>
+                    <input type="email" id="userEmail" name="userEmail" required placeholder="example@email.com">
+                </div>
+                <div class="form-group">
+                    <label for="userPhone">전화번호:</label>
+                    <input type="tel" id="userPhone" name="userPhone" required placeholder="010-1234-5678">
+                </div>
+                <div class="form-group">
+                    <label for="userProduct">어떤 상품을 선택하실까요?</label>
+                    <select id="userProduct" name="userProduct" required>
+                        <option value="" disabled selected>원하시는 서비스를 선택하세요</option>
+                        <option value="uiux">UI/UX 디자인</option>
+                        <option value="web">웹사이트 디자인</option>
+                        <option value="branding">브랜딩</option>
+                        <option value="app">모바일 앱 디자인</option>
+                        <option value="motion">모션 그래픽</option>
+                    </select>
+                </div>
+                <button type="submit" class="social-btn submit-btn">제출하기</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 기능별 모듈화된 자바스크립트 -->
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>

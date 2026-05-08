@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 페이지 - 상담 신청 목록</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .admin-container {
+            max-width: 1000px;
+            margin: 3rem auto;
+            padding: 2rem;
+            background: var(--container-bg);
+            border: 2px solid var(--primary-color);
+            border-radius: 12px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 2rem;
+            background-color: #fff;
+        }
+        th, td {
+            border: 1px solid var(--primary-color);
+            padding: 1rem;
+            text-align: left;
+            color: var(--text-color);
+        }
+        th {
+            background-color: var(--primary-color);
+            color: #fff;
+            font-size: 1.1rem;
+        }
+        .header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px dashed var(--primary-color);
+            padding-bottom: 1rem;
+        }
+        .download-btn {
+            background-color: #A35D6A;
+            color: #fff;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-family: var(--font-family);
+            font-weight: bold;
+        }
+        .download-btn:hover {
+            opacity: 0.9;
+        }
+        .home-btn {
+            background-color: var(--primary-color);
+            color: #fff;
+            text-decoration: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            margin-left: 10px;
+            font-weight: bold;
+        }
+        .home-btn:hover {
+            background-color: #332b24;
+        }
+        .empty-message {
+            text-align: center;
+            margin-top: 3rem;
+            color: var(--secondary-color);
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <div class="header-actions">
+            <h1 style="margin: 0; color: var(--primary-color); border: none; padding: 0;">상담 신청 목록 (관리자)</h1>
+            <div>
+                <button id="downloadCsv" class="download-btn">CSV 다운로드</button>
+                <a href="index.html" class="home-btn">메인으로 돌아가기</a>
+            </div>
+        </div>
+        
+        <table id="requestsTable">
+            <thead>
+                <tr>
+                    <th>접수일시</th>
+                    <th>이름</th>
+                    <th>이메일</th>
+                    <th>전화번호</th>
+                    <th>선택 상품</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- 데이터가 동적으로 들어옵니다 -->
+            </tbody>
+        </table>
+        <p id="emptyMsg" class="empty-message" style="display: none;">접수된 상담 신청이 없습니다.</p>
+    </div>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>
