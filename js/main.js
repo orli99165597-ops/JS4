@@ -136,78 +136,128 @@ class UIManager {
 
 /**
  * 음성 재생(TTS) 관련 로직을 관리하는 클래스
+ * 브라우저 기계음을 피하기 위해, 실제 녹음된 음성 파일(audio/문장ID.wav)을 우선 재생합니다.
  */
 class TTSManager {
     constructor(uiManager, pagesData) {
         this.uiManager = uiManager;
         this.pagesData = pagesData;
+        this.currentAudio = null;
         this.synth = window.speechSynthesis;
-        this.voices = [];
-        
-        // 목소리 데이터는 비동기로 로드되므로 이벤트 등록
-        this.synth.onvoiceschanged = () => {
-            this.voices = this.synth.getVoices();
-        };
-        // 브라우저에 따라 이미 로드되어 있을 수 있음
-        this.voices = this.synth.getVoices();
+        this.isPlaying = false; // 재생 상태 관리
     }
 
-    // 현재 활성화된 페이지의 텍스트를 순차적으로 읽음
     playCurrentPage(pageIndex) {
-        this.stop(); // 기존 재생 정지
-        this.utterances = []; // 브라우저 버그(GC로 인해 onend가 무시되는 현상) 방지용 배열
-        
+        this.stop(); 
         const pageData = this.pagesData[pageIndex];
         if (!pageData) return;
 
-        pageData.sentences.forEach(sentence => {
-            const utterance = new SpeechSynthesisUtterance(sentence.text);
-            this.utterances.push(utterance); // 메모리에서 사라지지 않게 보관
-            utterance.lang = 'ko-KR';
-            
-            // 20대 여대생 느낌을 위한 피치(음높이)와 속도 세팅 (통통 튀고 경쾌하게)
-            utterance.rate = 1.05; // 살짝 빠르고 발랄하게
-            utterance.pitch = 1.5; // 음을 확실히 높여서 젊고 맑은 목소리 강조
+        this.isPlaying = true;
+        let sentenceIndex = 0;
 
-            // 가장 자연스러운 고품질 목소리 우선 선택 로직
-            if (this.voices.length > 0) {
-                const koreanVoices = this.voices.filter(v => v.lang.includes('ko'));
-                
-                // 1순위: 엣지 브라우저의 뉴럴 보이스 (SunHi - 가장 젊고 예쁜 목소리)
-                let bestVoice = koreanVoices.find(v => v.name.includes('SunHi') && v.name.includes('Online'));
-                // 2순위: 그 외 클라우드 기반 자연스러운 목소리
-                if (!bestVoice) bestVoice = koreanVoices.find(v => v.name.includes('Natural') || v.name.includes('Online'));
-                // 3순위: 구글 크롬 브라우저 기본 한국어
-                if (!bestVoice) bestVoice = koreanVoices.find(v => v.name.includes('Google'));
-                // 4순위: 브라우저 기본 한국어
-                if (!bestVoice && koreanVoices.length > 0) bestVoice = koreanVoices[0];
-                
-                if (bestVoice) {
-                    utterance.voice = bestVoice;
-                }
+        const playNextSentence = () => {
+            if (!this.isPlaying) return; // 정지된 경우 중단
+            if (sentenceIndex >= pageData.sentences.length) {
+                this.uiManager.clearHighlights();
+                this.isPlaying = false;
+                return;
             }
 
-            // 읽기 시작 시 이전 하이라이트를 모두 초기화하고 현재 문장만 하이라이트
-            utterance.onstart = () => {
-                this.uiManager.clearHighlights();
-                this.uiManager.highlightSentence(sentence.id, true);
-            };
+            const sentence = pageData.sentences[sentenceIndex];
+            this.uiManager.clearHighlights();
+            this.uiManager.highlightSentence(sentence.id, true);
 
-            // 읽기 종료 시 하이라이트 제거
-            utterance.onend = () => {
-                this.uiManager.highlightSentence(sentence.id, false);
-            };
+            // 1순위: 로컬 audio/id.wav 파일 시도
+            const localAudioPath = `audio/${sentence.id}.wav`;
+            this.playAudioSource(localAudioPath, () => {
+                sentenceIndex++;
+                playNextSentence();
+            }, () => {
+                // 로컬 파일 실패 시 2순위: 구글 클라우드 온라인 음성 시도
+                if (!this.isPlaying) return;
+                const googleUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=ko&client=tw-ob&q=${encodeURIComponent(sentence.text)}`;
+                this.playAudioSource(googleUrl, () => {
+                    sentenceIndex++;
+                    playNextSentence();
+                }, () => {
+                    // 온라인 음성마저 실패 시 3순위: 브라우저 기본 TTS 폴백
+                    if (!this.isPlaying) return;
+                    this.fallbackSpeech(sentence.text, () => {
+                        sentenceIndex++;
+                        playNextSentence();
+                    });
+                });
+            });
+        };
 
-            // 에러 발생 시에도 하이라이트 초기화 방어코드
-            utterance.onerror = () => {
-                this.uiManager.highlightSentence(sentence.id, false);
-            };
+        playNextSentence();
+    }
 
-            this.synth.speak(utterance);
+    // 오디오 파일(로컬 또는 온라인)을 재생하고 중복 콜백을 방지하는 유틸리티 메서드
+    playAudioSource(src, onSuccess, onError) {
+        if (!this.isPlaying) return;
+        this.currentAudio = new Audio(src);
+        
+        let handled = false; // 중복 실행 방지 플래그
+
+        this.currentAudio.onended = () => {
+            if (handled) return;
+            handled = true;
+            onSuccess();
+        };
+
+        this.currentAudio.onerror = () => {
+            if (handled) return;
+            handled = true;
+            onError();
+        };
+
+        this.currentAudio.play().catch(e => {
+            if (handled) return;
+            handled = true;
+            onError();
         });
     }
 
+    // 최후의 수단: 브라우저 기본 TTS
+    fallbackSpeech(text, callback) {
+        if (!this.isPlaying) return;
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'ko-KR';
+        utterance.rate = 0.9; 
+        utterance.pitch = 0.7; // 피치를 낮춰서 어색함 방지
+
+        const voices = this.synth.getVoices();
+        if (voices.length > 0) {
+            const koreanVoices = voices.filter(v => v.lang.includes('ko'));
+            let bestVoice = koreanVoices.find(v => v.name.includes('SunHi') && v.name.includes('Online'));
+            if (!bestVoice) bestVoice = koreanVoices.find(v => v.name.includes('Google'));
+            if (bestVoice) utterance.voice = bestVoice;
+        }
+
+        let handled = false;
+        utterance.onend = () => {
+            if (handled) return;
+            handled = true;
+            callback();
+        };
+        utterance.onerror = () => {
+            if (handled) return;
+            handled = true;
+            callback();
+        };
+
+        this.synth.speak(utterance);
+    }
+
     stop() {
+        this.isPlaying = false;
+        if (this.currentAudio) {
+            this.currentAudio.pause();
+            this.currentAudio.currentTime = 0;
+            this.currentAudio.removeAttribute('src'); // 메모리 누수 방지
+            this.currentAudio = null;
+        }
         this.synth.cancel();
         this.uiManager.clearHighlights();
     }
